@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { DM_Sans } from "next/font/google";
 import "./globals.css";
 import { ShortlistProvider } from "@/context/ShortlistContext";
@@ -9,8 +9,13 @@ import { Header } from "@/components/Header";
 const dmSans = DM_Sans({ subsets: ["latin"], variable: "--font-dm-sans" });
 
 export const metadata: Metadata = {
-  title: "Corporate Gifting Catalog",
-  description: "Browse and shortlist corporate gifts",
+  title: "Deepak Stores | Corporate Gifting Catalog",
+  description: "Browse and shortlist corporate gifts from Deepak Stores",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default async function RootLayout({
@@ -26,7 +31,7 @@ export default async function RootLayout({
         <AdminAuthProvider isAdmin={isAdmin}>
           <ShortlistProvider>
             <Header />
-            <main className="max-w-6xl mx-auto px-4 py-6">{children}</main>
+            <main className="max-w-6xl mx-auto px-4 sm:px-6 py-4 sm:py-6 min-h-[calc(100vh-120px)]">{children}</main>
           </ShortlistProvider>
         </AdminAuthProvider>
       </body>

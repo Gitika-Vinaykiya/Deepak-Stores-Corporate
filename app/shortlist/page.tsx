@@ -12,7 +12,7 @@ export default function ShortlistPage() {
 
   const productList = items.map((i) => i.name).join("\n- ");
   const quantity = 100;
-  const whatsappMessage = `Hi, I'm interested in the following corporate gifts:
+  const whatsappMessage = `Hi, I'm interested in the following products from Deepak Stores:
 - ${productList}
 
 Quantity approx: ${quantity}.

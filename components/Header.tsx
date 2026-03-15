@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -21,18 +22,26 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-surface-200">
-      <div className="max-w-6xl mx-auto px-4 py-4">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <Link href="/" className="text-xl font-semibold text-zinc-900 tracking-tight">
-            Corporate Gifts
+      <div className="max-w-6xl mx-auto px-4 py-3 sm:py-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4">
+          <Link href="/" className="flex items-center gap-2 shrink-0">
+            <Image
+              src="/dspl.JPG.png"
+              alt="Deepak Stores"
+              width={120}
+              height={40}
+              className="h-8 w-auto object-contain"
+              priority
+            />
           </Link>
-          <form onSubmit={handleSearch} className="flex-1 sm:max-w-sm">
+          <form onSubmit={handleSearch} className="flex-1 w-full sm:max-w-sm min-w-0">
             <input
               type="search"
               placeholder="Search products..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl border border-surface-200 bg-surface-50 text-sm placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors"
+              className="w-full px-4 py-2.5 sm:py-2 rounded-xl border border-surface-200 bg-surface-50 text-base sm:text-sm placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors"
+              enterKeyHint="search"
             />
           </form>
           <div className="flex items-center gap-6">

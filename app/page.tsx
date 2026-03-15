@@ -22,14 +22,14 @@ export default async function HomePage() {
           Corporate Gifting Catalog
         </h1>
         <p className="mt-4 text-zinc-600 max-w-xl mx-auto text-lg leading-relaxed">
-          Curated corporate gifts for every occasion. Quality assured, transparent bulk pricing, and direct vendor support for a seamless gifting experience.
+          Curated corporate gifts from Deepak Stores for every occasion. Quality assured, transparent bulk pricing, and direct vendor support for a seamless gifting experience.
         </p>
       </div>
 
       <section>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-zinc-900">
-            All Corporate
+            All Products
           </h2>
           <Link
             href="/products"

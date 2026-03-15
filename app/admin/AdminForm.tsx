@@ -90,7 +90,13 @@ export function AdminForm({
       formData.set("category_id", categoryId || "");
       formData.set("price_range_id", priceRangeId || "");
       formData.set("event_ids", JSON.stringify(eventIds));
-      imageFiles.forEach((file) => formData.append("images", file));
+      imageFiles.forEach((file, i) => {
+        const hasValidName = file.name?.trim() && /\.(jpe?g|png|webp|gif)$/i.test(file.name);
+        const fileToSend = hasValidName
+          ? file
+          : new File([file], `photo-${Date.now()}-${i}.jpg`, { type: file.type || "image/jpeg" });
+        formData.append("images", fileToSend);
+      });
 
       const res = await fetch("/webhook/new-product", {
         method: "POST",
@@ -123,10 +129,18 @@ export function AdminForm({
     e.preventDefault();
     setStatus(null);
     try {
+      const min = parseInt(minPrice, 10);
+      const max = maxPrice ? parseInt(maxPrice, 10) : null;
+      const { data: ranges } = await supabase.from("price_ranges").select("id, min_price, max_price");
+      const existing = (ranges ?? []).find((r) => r.min_price === min && (r.max_price ?? null) === max);
+      if (existing) {
+        setStatus("Price range already exists.");
+        return;
+      }
       const { error } = await supabase.from("price_ranges").insert({
         name: priceName,
-        min_price: parseInt(minPrice, 10),
-        max_price: maxPrice ? parseInt(maxPrice, 10) : null,
+        min_price: min,
+        max_price: max,
       });
       if (error) throw error;
       setStatus("Price range added!");
@@ -143,7 +157,17 @@ export function AdminForm({
     e.preventDefault();
     setStatus(null);
     try {
-      const { error } = await supabase.from("categories").insert({ name: categoryName });
+      const trimmed = categoryName.trim().toLowerCase();
+      const { data: existing } = await supabase
+        .from("categories")
+        .select("id")
+        .ilike("name", trimmed)
+        .maybeSingle();
+      if (existing) {
+        setStatus("Category already exists.");
+        return;
+      }
+      const { error } = await supabase.from("categories").insert({ name: categoryName.trim() });
       if (error) throw error;
       setStatus("Category added!");
       setCategoryName("");
@@ -157,7 +181,17 @@ export function AdminForm({
     e.preventDefault();
     setStatus(null);
     try {
-      const { error } = await supabase.from("events").insert({ name: eventName });
+      const trimmed = eventName.trim().toLowerCase();
+      const { data: existing } = await supabase
+        .from("events")
+        .select("id")
+        .ilike("name", trimmed)
+        .maybeSingle();
+      if (existing) {
+        setStatus("Event already exists.");
+        return;
+      }
+      const { error } = await supabase.from("events").insert({ name: eventName.trim() });
       if (error) throw error;
       setStatus("Event added!");
       setEventName("");
@@ -321,7 +355,7 @@ export function AdminForm({
       {status && (
         <p
           className={`text-sm ${
-            status.startsWith("Error") ? "text-red-600" : "text-green-600"
+            status.startsWith("Error") ? "text-red-600" : "text-primary-600"
           }`}
         >
           {status}
